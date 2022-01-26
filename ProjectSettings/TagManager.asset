@@ -3,7 +3,15 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Ground
+  - Enemy
+  - WallStairs
+  - LavaCube
+  - Jumper
+  - Front_Wheels
+  - Back_Wheels
+  - Legs
   layers:
   - Default
   - TransparentFX
@@ -15,7 +23,7 @@ TagManager:
   - 
   - Ground
   - Players
-  - 
+  - Unwalkable
   - 
   - 
   - 

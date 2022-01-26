@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "455232860329",
+    "firebase_url": "https://another-game-2c900-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "another-game-2c900",
+    "storage_bucket": "another-game-2c900.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:455232860329:android:7b50f6d26ab3b9d76cb9b8",
+        "android_client_info": {
+          "package_name": "com.goodboi.anothergame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "455232860329-177sh2j5g9ajbhgmu2pctdr18d11l9va.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUINBx7rL1vZAbA0x7QBUxQxkQgifL3bI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "455232860329-177sh2j5g9ajbhgmu2pctdr18d11l9va.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
