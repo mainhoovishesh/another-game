@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.IO;
 using System.Reflection.Emit;
 using System.Collections;
 using System.Collections.Generic;
@@ -56,11 +58,12 @@ public class Movement : MonoBehaviour
         HorizontalAxisName = "Horizontal";
         VerticalAxisName = "Vertical";
         m_JumpAxis = "Jump";
+        currentEulerAngles = Player_Sphere.transform.eulerAngles;
         gameObject.tag = "Player";
 
-        if(Legs==null){
+        
             Legs =GameObject.FindGameObjectsWithTag("Legs");
-        }
+        
         
         foreach(GameObject ILegs in Legs)
         {
@@ -99,56 +102,65 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Move();
-        //Turn();
+        VerticalAxis_Movement();
+        HorizontalAxis_Movement();
+        rotating_Towards_Camera();
         if (m_JumpInputValue != 0)
         {
             jump();
         }
     }
-    private void Move()
+    private void rotating_Towards_Camera()
     {
-        Vector3 direction = new Vector3(HorizontalInputValue, 0, 0).normalized;
-        Vector3 turndir = new Vector3(0, 0, VerticalInputValue).normalized;
-        if (direction.magnitude >= 0.1f)
-        {
-            float targetangle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(this.transform.eulerAngles.y, targetangle, ref turnsmoothvelocity, turnspeedtime);
-            transform.rotation = Quaternion.Euler(0f, angle, 0f);
-
-            currentEulerAngles += Vector3.forward * Time.deltaTime * m_Speed * 10;
-            currentRotation.eulerAngles = currentEulerAngles;
-            Player_Sphere.rotation = currentRotation;
-            Vector3 movedir = Quaternion.Euler(0f, targetangle, 0f) * Vector3.forward;
-            Vector3 Movement = movedir * m_Speed * Time.deltaTime;
-            m_RigidBody.MovePosition(m_RigidBody.position + Movement);
-
+        Player_Sphere.transform.eulerAngles = new Vector3(Player_Sphere.transform.eulerAngles.x,cam.eulerAngles.y,Player_Sphere.transform.eulerAngles.z);
+    }
+    private void VerticalAxis_Movement()
+    {
+        Vector3 direction = new Vector3(0, 0, VerticalInputValue).normalized;
+        Debug.Log(direction);
+        if (direction.magnitude > 0f){
+            m_RigidBody.MovePosition(m_RigidBody.position + Movements(direction));
         }
-        else if (turndir.magnitude >= 0.1f)
-        {
-            float targetangle = Mathf.Atan2(turndir.x, turndir.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(this.transform.eulerAngles.y, targetangle, ref turnsmoothvelocity, turnspeedtime);
-            transform.rotation = Quaternion.Euler(0f, angle, 0f);
-
-            currentEulerAngles += Vector3.forward * Time.deltaTime * m_Speed * 10;
-            currentRotation.eulerAngles = currentEulerAngles;
-            Player_Sphere.rotation = currentRotation;
-            Vector3 movedir = Quaternion.Euler(0f, targetangle, 0f) * Vector3.forward;
-            Vector3 Movement = movedir * m_Speed * Time.deltaTime;
-            m_RigidBody.MovePosition(m_RigidBody.position + Movement);
+        else if (direction.magnitude < 0f){
+            m_RigidBody.MovePosition(m_RigidBody.position + Movements(direction));
+        }
+        else if (direction.magnitude == 0f){
+            m_RigidBody.MovePosition(m_RigidBody.position + Movements(direction));
         }
 
         //TODO : Roll the object towards te input directional value
         //For Example if user inputs value "W" the ball should roll towards that point while playing some animation
 
     }
-    /*private void Turn()
+    private void HorizontalAxis_Movement()
     {
-        float turn = VerticalInputValue * m_TurnSpeed * Time.deltaTime;
-        Quaternion turnRotation = Quaternion.Euler(0f, turn, 0f);
-        m_RigidBody.MoveRotation(m_RigidBody.rotation * turnRotation);
+        Vector3 turndir = new Vector3(HorizontalInputValue, 0, 0).normalized;
+        Debug.Log(turndir);
+        
+        if (turndir.magnitude > 0f){
+            m_RigidBody.MovePosition(m_RigidBody.position + Movements(turndir));
+        }
+        else if (turndir.magnitude < 0f){
+            m_RigidBody.MovePosition(m_RigidBody.position + Movements(turndir));
+        }
+        else if (turndir.magnitude == 0){
+            m_RigidBody.MovePosition(m_RigidBody.position + Movements(turndir));
+        }
+    }
+    public Vector3 Movements(Vector3 InputAxis)
+    {
+        Vector3 movingdirection = InputAxis;
+        if(InputAxis.magnitude==0)
+        {
+            movingdirection = Vector3.zero;
+        }
+        else 
+        {
+            m_RigidBody.AddForce(movingdirection*m_Speed, ForceMode.Acceleration);
+        }
+        return movingdirection;
 
-    }*/
+    }
     private void jump()
     {
         if (isgrounded == true)
