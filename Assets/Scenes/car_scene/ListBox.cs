@@ -1,17 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+
 using UnityEngine.UI;
 
 
-public class ListBox
+public class ListBox : MonoBehaviour
 {
-    public Image BoxImage;
-    public string Text;
+    public Sprite BoxImage;
+    public Text Text;
+    public GameObject Weapon;
+    public Vector3 Position;
+    public GameObject Prefab;
 
-    public ListBox(Image _Image,string _Text)
+    public ListBox(Sprite _Image,string _Text,GameObject _Weapon,Vector3 _Position)
     {
+        Prefab = this.gameObject;
         BoxImage = _Image;
-        Text = _Text;
+        Text.text = _Text;
+        Position = _Position;
+        try
+        {
+            Weapon = _Weapon;
+        }
+        catch(Exception e)
+        {
+            Debug.Log(e);
+        }
     }
 }

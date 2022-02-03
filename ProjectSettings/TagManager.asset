@@ -12,6 +12,7 @@ TagManager:
   - Front_Wheels
   - Back_Wheels
   - Legs
+  - Weapons
   layers:
   - Default
   - TransparentFX
